@@ -1,0 +1,76 @@
+[tool.poetry]
+name = "simplebank"
+version = "0.1.0"
+description = ""
+authors = ["CostGamer"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.13"
+django = "^5.2.8"
+djangorestframework = "^3.16.1"
+djangorestframework-simplejwt = "^5.5.1"
+python-dotenv = "^1.2.1"
+django-filter = "^25.2"
+psycopg2-binary = "^2.9.11"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.1"
+pytest-django = "^4.11.1"
+ruff = "^0.14.7"
+pre-commit = "^4.5.0"
+mypy = "^1.19.0"
+django-stubs = "^5.2.7"
+djangorestframework-stubs = "^3.16.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+]
+
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "simplebank"]
+
+
+[tool.ruff.lint.per-file-ignores]
+"simplebank/settings/*.py" = ["F403", "F405"]
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+ignore_missing_imports = true
+check_untyped_defs = true
+exclude = ["migrations/", "tests/"]
+
+
+[tool.django-stubs]
+django_settings_module = "simplebank.settings"
