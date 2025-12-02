@@ -41,13 +41,13 @@ jobs:
         run: |
           poetry install --no-interaction --no-root --with dev
 
-      - name: Run black (formatting)
-        run: |
-          poetry run black --check .
-
       - name: Run ruff (linting)
         run: |
           poetry run ruff check .
+
+      - name: Run ruff (formatting check)
+        run: |
+          poetry run ruff format --check .
 
   type_check:
     runs-on: ubuntu-latest
