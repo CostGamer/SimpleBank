@@ -12,5 +12,6 @@ class TransactionSerializer(serializers.ModelSerializer):
             "transaction_type",
             "description",
             "created_at",
+            "metadata",
         ]
         read_only_fields = fields

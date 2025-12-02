@@ -58,3 +58,11 @@ class BankAccount(models.Model):
             number = "".join([str(random.randint(0, 9)) for _ in range(10)])
             if not BankAccount.objects.filter(account_number=number).exists():
                 return number
+
+    @staticmethod
+    def get_system_account() -> "BankAccount":
+        try:
+            system_user = User.objects.get(email="system@simplebank.internal")
+            return system_user.bank_account
+        except User.DoesNotExist:
+            raise ValueError("System account not found. Run migrations") from None
