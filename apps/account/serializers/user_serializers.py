@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import BankAccount, User
-from .services import AccountService
+from ..models import BankAccount, User
+from ..services import AccountService
 
 
 class UserRegistrationSerializer(serializers.Serializer):

@@ -23,12 +23,12 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES)
     description = models.CharField(max_length=255, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     transaction_id = models.UUIDField(unique=True, default=uuid.uuid4)
 
     class Meta:
         db_table = "transactions"
-        ordering = ["-timestamp"]
+        ordering = ["-created_at"]
 
     def __str__(self) -> str:
         return f"{self.transaction_type} {self.amount} - {self.account.account_number}"

@@ -8,6 +8,8 @@ urlpatterns = [
     # auth
     path("api/auth/", include("apps.account.urls")),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # transaction
+    path("api/transactions/", include("apps.transaction.urls")),
     # Swagger UI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

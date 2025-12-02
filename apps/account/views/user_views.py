@@ -7,11 +7,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.account.services import AccountService
 
-from .serializers import (
+from ..serializers import (
     BankAccountSerializer,
     UserRegistrationResponseSerializer,
     UserRegistrationSerializer,
@@ -21,14 +22,14 @@ from .serializers import (
 logger = logging.getLogger(__name__)
 
 
-@extend_schema(
-    request=UserRegistrationSerializer,
-    responses={201: UserRegistrationResponseSerializer},
-    tags=["auth"],
-)
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=UserRegistrationSerializer,
+        responses={201: UserRegistrationResponseSerializer},
+        tags=["auth"],
+    )
     def post(self, request: Request) -> Response:
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -45,10 +46,17 @@ class RegisterView(APIView):
 
 
 class LoginView(TokenObtainPairView):
+    @extend_schema(
+        request=TokenObtainPairSerializer,
+        responses={200: TokenObtainPairSerializer},
+        tags=["auth"],
+    )
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         response = super().post(request, *args, **kwargs)
+
         if response.status_code == 200:
             if email := request.data.get("email"):
                 AccountService.update_last_login(email)
                 logger.info(f"Login successful, updating last_login for: {email}")
+
         return response
