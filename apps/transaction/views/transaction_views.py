@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.account.models import User
 
-from ..filters import TransactionFilter
+from ..filters import TransactionFilter, TransactionPagination
 from ..models import Transaction
 from ..serializers import TransactionSerializer
 
@@ -19,6 +19,7 @@ class TransactionListView(generics.ListAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
     filterset_class = TransactionFilter
+    pagination_class = TransactionPagination
 
     @extend_schema(
         tags=["Transactions"],
@@ -50,6 +51,13 @@ class TransactionListView(generics.ListAPIView):
                 type=OpenApiTypes.INT,
                 location=OpenApiParameter.QUERY,
                 description="Page number (optional, default: 1)",
+                required=False,
+            ),
+            OpenApiParameter(
+                name="limit",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
+                description="Number of items per page (default: 20, max: 100)",
                 required=False,
             ),
         ],

@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Transaction
 
@@ -13,3 +14,9 @@ class TransactionFilter(filters.FilterSet):
     class Meta:
         model = Transaction
         fields = ["from_date", "to_date", "transaction_type"]
+
+
+class TransactionPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = "limit"
+    max_page_size = 100
