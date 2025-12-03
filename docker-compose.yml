@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: simplebank_db
+    environment:
+      POSTGRES_DB: ${PG_DB_NAME}
+      POSTGRES_USER: ${PG_DB_USER}
+      POSTGRES_PASSWORD: ${PG_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${PG_DB_PORT_OUT}:${PG_DB_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - simplebank_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simplebank_app
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - simplebank_network
+
+volumes:
+  postgres_data:
+
+networks:
+  simplebank_network:
+    driver: bridge
