@@ -75,3 +75,16 @@ exclude = ["migrations/", "tests/"]
 
 [tool.django-stubs]
 django_settings_module = "simplebank.settings"
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "simplebank.settings"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--disable-warnings",
+]
