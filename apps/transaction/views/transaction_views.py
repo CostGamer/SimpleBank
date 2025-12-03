@@ -67,5 +67,4 @@ class TransactionListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = cast(User, self.request.user)
-        logger.info(f"Transaction list request from user: {user.email}")
         return Transaction.objects.filter(account=user.bank_account)

@@ -22,7 +22,7 @@ class TransactionService:
         if amount <= 0:
             raise ValueError("Amount must be positive")
         fee = amount * TransactionService.FEE_PERCENTAGE
-        return Decimal(max(fee, TransactionService.MIN_FEE))
+        return round(Decimal(max(fee, TransactionService.MIN_FEE)), 2)
 
     @staticmethod
     @transaction.atomic
@@ -85,7 +85,7 @@ class TransactionService:
 
         # Calculate amounts
         fee = TransactionService.calculate_fee(amount)
-        total_debit = amount + fee
+        total_debit = round(amount + fee, 2)
 
         if sender_locked.balance < total_debit:
             raise ValueError(
